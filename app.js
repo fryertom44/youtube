@@ -15,11 +15,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser())
 
 app.use('/api/v1/users', users);
+app.use('/api/v1/videos', videos);
 
 module.exports = app;
-
-var port = process.env.PORT || 3000;
-
-app.listen(port, () => {
-  console.log("Server running on port", port);
- });
