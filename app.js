@@ -6,6 +6,7 @@ var nodeFetch = require('node-fetch');
 require('dotenv').config();
 
 var users = require('./routes/users');
+var videos = require('./routes/videos');
 
 var app = express();
 
