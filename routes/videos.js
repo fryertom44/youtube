@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 const {google} = require('googleapis');
 
@@ -15,17 +15,23 @@ async function search(params) {
   console.log(res.data);
 }
 
+const path = require('path');
+const appDir = path.dirname(require.main.filename);
+const fs = require('fs');
+
 /* GET videos listing. */
 router.get('/', function(req, res, next) {
   youtube.search.list(channel_params())
   .then(response => {
-    const channelIds = response.data.items.map(i => i.id.channelId)
+    const channelIds = response.data.items.map(i => i.id.channelId);
+    const searchKeywords = fs.readFileSync(`${appDir}/search_filter`, "UTF-8");
+    console.log(searchKeywords);
     youtube.search.list(
-      video_params({q: {channelId: channelIds}})
+      video_params({channelId: channelIds, q: {title: searchKeywords}})
     )
     .then(response => {
-      console.log(response)
-      res.json(response.data)
+      console.log(response);
+      res.json(response.data);
     })
     .catch(error => {
       console.log('There is an error: ' + error)
@@ -50,6 +56,7 @@ function video_params(params) {
     part: "id,snippet",
     q: params.q,
     type: "video",
+    channelId: params.channelId,
     fields: "items(id/videoId,snippet(title,publishedAt))",
   };
 };
