@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
 const {google} = require('googleapis');
 
 // initialize the Youtube API library
@@ -8,12 +7,6 @@ const youtube = google.youtube({
   version: 'v3',
   auth: process.env.GOOGLE_API_KEY,
 });
-
-// a very simple example of searching for youtube videos
-async function search(params) {
-  const res = await youtube.search.list(params);
-  console.log(res.data);
-}
 
 const path = require('path');
 const appDir = path.dirname(require.main.filename);
@@ -34,13 +27,18 @@ router.get('/', function(req, res, next) {
       res.json(response.data);
     })
     .catch(error => {
-      console.log('There is an error: ' + error)
+      console.log('Error fetching videos: ' + error)
     })
   })
   .catch(error => {
-    console.log('There is an error: ' + error)
+    console.log('Error fetching channels: ' + error)
   })
 });
+
+async function search(params) {
+  const res = await youtube.search.list(params);
+  console.log(res.data);
+}
 
 function channel_params() {
   return {
