@@ -58,6 +58,9 @@ const VideoSvc = {
   },
   list: function() {
     return Video.findAll();
+  },
+  findById: function(id) {
+    return Video.findByPk(id);
   }
 }
 

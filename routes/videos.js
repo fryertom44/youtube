@@ -27,4 +27,17 @@ router.get('/', function(req, res, next) {
   })
 });
 
+
+router.get('/:id', function(req, res, next) {
+  VideoSvc.findById(req.params['id'])
+  .then(video => {
+    console.log("Video retrieved: " + video);
+    res.json({video: video});
+  })
+  .catch(error => {
+    res.status(error.code || 500);
+    res.json({ error: error.errors });
+  })
+});
+
 module.exports = router;
