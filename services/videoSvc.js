@@ -55,6 +55,9 @@ const VideoSvc = {
         }
       )
     })
+  },
+  list: function() {
+    return Video.findAll();
   }
 }
 
