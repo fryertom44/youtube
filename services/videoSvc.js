@@ -61,6 +61,9 @@ const VideoSvc = {
   },
   findById: function(id) {
     return Video.findByPk(id);
+  },
+  destroy: function(id) {
+    return Video.findByPk(id).then(video => video.destroy(id));
   }
 }
 

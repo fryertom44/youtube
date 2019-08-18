@@ -40,4 +40,17 @@ router.get('/:id', function(req, res, next) {
   })
 });
 
+
+router.delete('/:id', function(req, res, next) {
+  VideoSvc.destroy(req.params['id'])
+  .then(video => {
+    console.log("Video destroyed: " + video);
+    res.json({video: video});
+  })
+  .catch(error => {
+    res.status(error.code || 500);
+    res.json({ error: error.errors });
+  })
+});
+
 module.exports = router;
