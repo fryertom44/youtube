@@ -6,7 +6,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: false,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: 'VARCHAR(50)'
       },
       channel_name: {
         type: 'VARCHAR(45)'
