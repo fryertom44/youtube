@@ -1,4 +1,6 @@
 'use strict';
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const {google} = require('googleapis');
 
@@ -64,6 +66,10 @@ const VideoSvc = {
   },
   destroy: function(id) {
     return Video.findByPk(id).then(video => video.destroy(id));
+  },
+  search: function(query) {
+    console.log("params:" + query.title);
+    return Video.findAll({ where: { title: {[Op.like]: query.title} }, attributes: ['id', 'title'] });
   }
 }
 
