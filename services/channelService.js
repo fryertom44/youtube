@@ -10,7 +10,7 @@ const youtube = google.youtube({
 
 const Channel = require('../models/index').Channel;
 
-const ChannelSvc = {
+const channelService = {
   store: function(params) {
     return youtube.search.list({
       part: "id,snippet",
@@ -34,4 +34,4 @@ const ChannelSvc = {
   }
 }
 
-module.exports = ChannelSvc;
+module.exports = channelService;

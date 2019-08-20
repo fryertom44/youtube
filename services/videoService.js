@@ -16,7 +16,7 @@ const path = require('path');
 const appDir = path.dirname(require.main.filename);
 const fs = require('fs');
 
-const VideoSvc = {
+const videoService = {
   store: function() {
     return youtube.search.list({
       part: "id,snippet",
@@ -45,7 +45,7 @@ const VideoSvc = {
       )
     })
     .then(response => {
-      console.log("VideoSvc" + response)
+      console.log("videoService" + response)
       const videoAttrs = response.data.items.map(i => {
         return {id: i.id.videoId, title: i.snippet.title, date: i.snippet.publishedAt}
       });
@@ -92,4 +92,4 @@ function video_params(params) {
   return hash;
 };
 
-module.exports = VideoSvc;
+module.exports = videoService;
