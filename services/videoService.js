@@ -10,46 +10,25 @@ const youtube = google.youtube({
   auth: process.env.GOOGLE_API_KEY,
 });
 
-const Video = require('../models/index').Video;
+const { Video } = require('../models/index');
+const ChannelService = require('../services/channelService');
 
-const path = require('path');
-const appDir = path.dirname(require.main.filename);
 const fs = require('fs');
 
-const videoService = {
-  store: function() {
-    return youtube.search.list({
-      part: "id,snippet",
-      q: "GlobalCyclingNetwork,globalmtb",
-      type: "channel",
-      fields: "items(id/channelId,snippet(title))"
-    })
-    .then(response => {
-      console.log(response.data.items);
-      var channelAttrs = response.data.items.map(i => {
-        return {id: i.id.channelId, channel_name: i.snippet.title}
-      });
-      console.log(channelAttrs);
-      return Channel.bulkCreate(channelAttrs,
-        {
-          fields:["id", "channel_name"],
-          updateOnDuplicate: ["id"]
-        }
-      )
-    })
+const VideoService = {
+  store: function(params) {
+    return ChannelService.store(params)
     .then(channels => {
-      const searchKeywords = fs.readFileSync(`${appDir}/search_filter`, "UTF-8");
+      const searchKeywords = fs.readFileSync(params.filterFilePath, "UTF-8");
       const channelIds = channels.map(i => i.get('id'));
       return youtube.search.list(
         video_params({channelId: channelIds, q: {title: searchKeywords}})
       )
     })
     .then(response => {
-      console.log("videoService" + response)
       const videoAttrs = response.data.items.map(i => {
         return {id: i.id.videoId, title: i.snippet.title, date: i.snippet.publishedAt}
       });
-      console.log("videoAttrs" + videoAttrs);
       return Video.bulkCreate(videoAttrs,
         {
           fields:["id", "title", "date"],
@@ -92,4 +71,4 @@ function video_params(params) {
   return hash;
 };
 
-module.exports = videoService;
+module.exports = VideoService;

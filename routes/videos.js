@@ -1,10 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const videoService = require("../services/videoService");
+const VideoService = require("../services/videoService");
+
+const path = require('path');
+const appDir = path.dirname(require.main.filename);
 
 /* GET videos listing. */
 router.post('/store', function(req, res, next) {
-  videoService.store()
+  VideoService.store(
+    {
+      channels: "GlobalCyclingNetwork,globalmtb",
+      filterFilePath: `${appDir}/search_filter`,
+    }
+  )
   .then(videos => {
     console.log("Videos saved/retrieved: " + videos);
     res.json({videos: videos});
@@ -16,7 +24,7 @@ router.post('/store', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-  videoService.list()
+  VideoService.list()
   .then(videos => {
     console.log("Videos retrieved: " + videos);
     res.json({videos: videos});
@@ -29,7 +37,7 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/book/:id', function(req, res, next) {
-  videoService.findById(req.params['id'])
+  VideoService.findById(req.params['id'])
   .then(video => {
     console.log("Video retrieved: " + video);
     res.json({video: video});
@@ -41,7 +49,7 @@ router.get('/book/:id', function(req, res, next) {
 });
 
 router.delete('/book/:id', function(req, res, next) {
-  videoService.destroy(req.params['id'])
+  VideoService.destroy(req.params['id'])
   .then(video => {
     console.log("Video destroyed: " + video);
     res.json({video: video});
@@ -53,7 +61,7 @@ router.delete('/book/:id', function(req, res, next) {
 });
 
 router.get('/search', function(req, res, next) {
-  videoService.search(req.query)
+  VideoService.search(req.query)
   .then(videos => {
     console.log("Videos found: " + videos);
     res.json({videos: videos});

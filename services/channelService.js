@@ -10,20 +10,18 @@ const youtube = google.youtube({
 
 const Channel = require('../models/index').Channel;
 
-const channelService = {
+const ChannelService = {
   store: function(params) {
     return youtube.search.list({
       part: "id,snippet",
-      q: params.q,
+      q: params.channels,
       type: "channel",
       fields: "items(id/channelId,snippet(title))"
     })
     .then(response => {
-      console.log(response.data.items);
       var channelAttrs = response.data.items.map(i => {
         return {id: i.id.channelId, channel_name: i.snippet.title}
       });
-      console.log(channelAttrs);
       return Channel.bulkCreate(channelAttrs,
         {
           fields:["id", "channel_name"],
@@ -34,4 +32,4 @@ const channelService = {
   }
 }
 
-module.exports = channelService;
+module.exports = ChannelService;
