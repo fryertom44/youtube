@@ -10,6 +10,7 @@ router.post('/store', function(req, res, next) {
   VideoService.store(
     {
       channels: "GlobalCyclingNetwork,globalmtb",
+      publishedAt: req.query.publishedAt,
       filterFilePath: `${appDir}/search_filter`,
     }
   )

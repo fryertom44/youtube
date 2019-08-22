@@ -22,7 +22,13 @@ const VideoService = {
       const searchKeywords = fs.readFileSync(params.filterFilePath, "UTF-8");
       const channelIds = channels.map(i => i.get('id'));
       return youtube.search.list(
-        video_params({channelId: channelIds, q: {title: searchKeywords}})
+        video_params(
+          {
+            channelId: channelIds,
+            publishedAt: params.publishedAt,
+            q: {title: searchKeywords}
+          }
+        )
       )
     })
     .then(response => {
@@ -60,7 +66,7 @@ function video_params(params) {
     channelId: params.channelId,
     fields: "items(id/videoId,snippet(title,publishedAt))",
   };
-  if (typeof params.publishedAt != 'undefined') {
+  if (params.publishedAt) {
     const searchDate = new Date(params.publishedAt);
     const dateStart = new Date(searchDate.getTime() - 1);
     const dateEnd = new Date(searchDate.getTime() + (24 * 60 * 60 * 1000));
