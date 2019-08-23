@@ -43,8 +43,8 @@ const VideoService = {
       )
     })
   },
-  list: function() {
-    return Video.findAll();
+  list: function(opts={}) {
+    return Video.findAll(opts);
   },
   findById: function(id) {
     return Video.findByPk(id);
@@ -53,8 +53,11 @@ const VideoService = {
     return Video.findByPk(id).then(video => video.destroy(id));
   },
   search: function(query) {
-    console.log("params:" + query.title);
-    return Video.findAll({ where: { title: {[Op.like]: query.title} }, attributes: ['id', 'title'] });
+    return Video.findAll(
+      { where: { title: {[Op.like]: `%${query.title}%`} },
+      order: [['date', 'DESC'], ['title', 'ASC']],
+      attributes: ['id', 'title', 'date'] }
+    );
   }
 }
 

@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "mocha"
   },
   "dependencies": {
     "body-parser": "~1.13.2",
@@ -18,6 +19,10 @@
     "sequelize-cli": "^5.5.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-datetime": "^1.5.0",
+    "faker": "^4.1.0",
+    "mocha": "^6.2.0",
     "nodemon": "^1.19.1"
   }
 }
