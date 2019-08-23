@@ -2,26 +2,19 @@
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
-const {google} = require('googleapis');
-
-// initialize the Youtube API library
-const youtube = google.youtube({
-  version: 'v3',
-  auth: process.env.GOOGLE_API_KEY,
-});
-
 const { Video } = require('../models/index');
+// const YoutubeService = require('../services/youtubeService');
 const ChannelService = require('../services/channelService');
-
+const YouTube = require('../services/youtubeService');
 const fs = require('fs');
 
 const VideoService = {
-  store: function(params) {
-    return ChannelService.store(params)
+  store: function(params = {}, YoutubeService = YouTube) {
+    return ChannelService.store(params, YoutubeService)
     .then(channels => {
       const searchKeywords = fs.readFileSync(params.filterFilePath, "UTF-8");
       const channelIds = channels.map(i => i.get('id'));
-      return youtube.search.list(
+      return YoutubeService.search.list(
         video_params(
           {
             channelId: channelIds,

@@ -1,9 +1,9 @@
-const assert = require ('assert');
 const { expect } = require ('chai');
 var chai = require('chai');
 chai.use(require('chai-datetime'));
+const sinon = require('sinon');
 
-const { sequelize } = require('../models/index');
+var YoutubeService = require('../services/youtubeService');
 const Video = require('../models/index').Video;
 const VideoService = require("../services/videoService");
 const { VideoFactory } = require('./factories/video');
@@ -58,7 +58,9 @@ describe('VideoService', function() {
       const retrievedVideo = await VideoService.findById(existingVideo.id);
       expect(
         retrievedVideo.get(['id', 'title'], {plain: true})
-      ).to.eql(existingVideo.get(['id', 'title'], {plain: true}));
+      ).to.eql(
+        existingVideo.get(['id', 'title'], {plain: true})
+      );
     }));
   });
 
@@ -72,17 +74,48 @@ describe('VideoService', function() {
         {title: "Hybrid"}
       ).map(el => el.get({ plain: true }));
       expect(videos).to.eql(
-        [
-          video3.get({plain: true}),
-         ]
+        [ video3.get({plain: true}) ]
       );
     }));
   });
 
   describe('#store()', function() {
+    var sandbox;
+
+    beforeEach(function () {
+      sandbox = sinon.sandbox.create();
+      var fakeYoutubeResponse = function(params) {
+        return new Promise(function(resolve, reject) {
+          if (params.type == 'channel') {
+            var response = { data: {items: [{id: {channelId: 'randomchannelid'}, snippet: {title: 'Channel Title'}}] }};
+          } else {
+            var response = { data: {items: [{id: {videoId: 'randomvideoid'}, snippet: {title: 'Video Title', publishedAt: "2016-08-16T12:00:00.000Z"}}] }};
+          }
+          resolve(response);
+        });
+      }
+      sandbox.stub(YoutubeService.search, "list").callsFake(fakeYoutubeResponse);
+    });
+
+    afterEach(function () {
+      sandbox.restore();
+    });
+
     it('should store videos', mochaAsync(async () => {
-      const videos = await VideoService.store();
-      expect(true).to.eql(false);
+      var videos = await VideoService.store(
+        {channels: 'some channel', filterFilePath: `./bin/search_filter`}, YoutubeService);
+
+      var videos = await VideoService.list({
+        order: [['date', 'ASC'], ['title', 'ASC']],
+        attributes: ['id', 'title', 'date']
+      }).map(el => el.get({ plain: true }));
+
+      expect(videos.length).to.eql(1);
+      expect(videos[0]).to.eql({
+        "date": new Date("2016-08-16T12:00:00.000Z"),
+        "id": "randomvideoid",
+        "title": "Video Title",
+      });
     }));
   });
 });

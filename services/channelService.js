@@ -1,18 +1,11 @@
 'use strict';
 
-const {google} = require('googleapis');
-
-// initialize the Youtube API library
-const youtube = google.youtube({
-  version: 'v3',
-  auth: process.env.GOOGLE_API_KEY,
-});
-
+const YouTube = require('../services/youtubeService');
 const Channel = require('../models/index').Channel;
 
 const ChannelService = {
-  store: function(params) {
-    return youtube.search.list({
+  store: function(params = {}, YoutubeService = YouTube) {
+    return YoutubeService.search.list({
       part: "id,snippet",
       q: params.channels,
       type: "channel",
