@@ -3,7 +3,6 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 const { Video } = require('../models/index');
-// const YoutubeService = require('../services/youtubeService');
 const ChannelService = require('../services/channelService');
 const YouTube = require('../services/youtubeService');
 const fs = require('fs');
