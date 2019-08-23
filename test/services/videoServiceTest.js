@@ -6,7 +6,7 @@ const sinon = require('sinon');
 var YoutubeService = require('../../services/youtubeService');
 const Video = require('../../models/index').Video;
 const VideoService = require("../../services/videoService");
-const { VideoFactory } = require('../factories/video');
+const { VideoFactory } = require('../factories/videoFactory');
 
 var mochaAsync = (fn) => {
   return done => {
