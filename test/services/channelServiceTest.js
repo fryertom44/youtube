@@ -4,9 +4,9 @@ var chai = require('chai');
 chai.use(require('chai-datetime'));
 const sinon = require('sinon');
 
-var YoutubeService = require('../services/youtubeService');
-const ChannelService = require('../services/channelService');
-const Channel = require('../models/index').Channel;
+var YoutubeService = require('../../services/youtubeService');
+const ChannelService = require('../../services/channelService');
+const Channel = require('../../models/index').Channel;
 
 var mochaAsync = (fn) => {
   return done => {

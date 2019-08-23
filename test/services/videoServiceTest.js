@@ -3,10 +3,10 @@ var chai = require('chai');
 chai.use(require('chai-datetime'));
 const sinon = require('sinon');
 
-var YoutubeService = require('../services/youtubeService');
-const Video = require('../models/index').Video;
-const VideoService = require("../services/videoService");
-const { VideoFactory } = require('./factories/video');
+var YoutubeService = require('../../services/youtubeService');
+const Video = require('../../models/index').Video;
+const VideoService = require("../../services/videoService");
+const { VideoFactory } = require('../factories/video');
 
 var mochaAsync = (fn) => {
   return done => {
