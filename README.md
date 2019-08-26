@@ -3,11 +3,17 @@
 A proxy service for the YouTube API
 
 ## Setup
-* Create a user for the database and grant permissions.
-* Create a .env file in the project root folder with the following variables:
-  YOUTUBE_DB_USER='youtube'
-  YOUTUBE_DB_PASSWORD='password'
-  YOUTUBE_DB_HOST='127.0.0.1'
+* Create a user for the database and grant permissions. Open a shell prompt and type:
+```bash
+mysql -u root -p
+```
+Then run the following SQL commands (replacing user, password and localhost for your own preferences)
+```sql
+CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
+GRANT permission ON database.table TO 'user'@'localhost';
+```
+* Rename ".env.example" file to ".env" and make sure the variables contain the correct information
+* Run:
 ```
 npm install
 npx sequelize db:init
