@@ -37,7 +37,7 @@ router.get('/', function(req, res, next) {
 });
 
 
-router.get('/book/:id', function(req, res, next) {
+router.get('/video/:id', function(req, res, next) {
   VideoService.findById(req.params['id'])
   .then(video => {
     console.log("Video retrieved: " + video);
@@ -49,7 +49,7 @@ router.get('/book/:id', function(req, res, next) {
   })
 });
 
-router.delete('/book/:id', function(req, res, next) {
+router.delete('/video/:id', function(req, res, next) {
   VideoService.destroy(req.params['id'])
   .then(video => {
     console.log("Video destroyed: " + video);
