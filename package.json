@@ -15,7 +15,7 @@
     "mysql": "^2.17.1",
     "mysql-import": "^2.0.2",
     "mysql2": "^1.6.5",
-    "sequelize": "^5.15.0",
+    "sequelize": "^5.15.1",
     "sequelize-cli": "^5.5.0"
   },
   "devDependencies": {
